@@ -13,6 +13,23 @@ class IMOEXDataDownloader:
         self.unclearn_path = os.path.join(self.main_path, "UnClearn")
         self.clearn_path = os.path.join(self.main_path, "Clearn")
 
+    def create_folders(self):
+        """
+        Создает папки 'Clearn' и 'UnClearn' в указанной базовой директории.
+        
+        :param base_path: Базовый путь, где будут созданы папки.
+        """
+        
+        # Проверка существования и создание папки 'Clearn', если она не существует
+        if not os.path.exists(self.clearn_path):
+            os.makedirs(self.clearn_path)
+            print(f"Папка '{self.clearn_path}' успешно создана.")
+        
+        # Проверка существования и создание папки 'UnClearn', если она не существует
+        if not os.path.exists(self.unclearn_path):
+            os.makedirs(self.unclearn_path)
+            print(f"Папка '{self.unclearn_path}' успешно создана.")
+
     def download_data(self):
         start_date_dt = datetime.strptime(self.start_date, '%Y-%m-%d')
         end_date_dt = datetime.strptime(self.end_date, '%Y-%m-%d')
@@ -73,11 +90,10 @@ class IMOEXDataDownloader:
 
     def clean_directories(self):
         """
-        Очищает папки UnClearn и Clearn, удаляя все содержащиеся в них файлы.
+        Удаляет папки UnClearn и Clearn.
         """
         self._clean_directory(self.unclearn_path)
         self._clean_directory(self.clearn_path)
-        print("Папки для неочищенных и очищенных данных были очищены.")
 
     def _clean_directory(self, path):
         """
@@ -85,18 +101,19 @@ class IMOEXDataDownloader:
 
         :param path: Путь к директории, которую необходимо очистить.
         """
-        for filename in os.listdir(path):
-            file_path = os.path.join(path, filename)
-            try:
-                if os.path.isfile(file_path) or os.path.islink(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print(f"Не удалось удалить {file_path}. Причина: {e}")
+        try:
+            if os.path.exists(path):
+                shutil.rmtree(path)
+                print(f"Папка '{path}' успешно удалена.")
+            else:
+                print(f"Папка '{path}' не найдена.")
+
+        except Exception as e:
+            print(f"Не удалось удалить папку '{path}'. Причина: {e}")
 
 if __name__ == "__main__":
     downloader = IMOEXDataDownloader(start_date="2004-01-01", end_date="2024-04-05")
+    downloader.create_folders()
     downloader.download_data()
     downloader.clean_and_combine_data()
     downloader.clean_directories()
