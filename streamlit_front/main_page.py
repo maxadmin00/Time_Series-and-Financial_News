@@ -13,7 +13,7 @@ news_path = os.path.join('data','every_piece_of_news.csv')
 
 st.title('Предсказание индексов российских бирж')
 
-df_spb = pd.read_csv(moscow_path).tail(30)
+df_spb = pd.read_csv(spb_path).tail(30)
 df_moscow = pd.read_csv(moscow_path).tail(30)
 
 fig = go.Figure()
