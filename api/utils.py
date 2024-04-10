@@ -23,9 +23,9 @@ def query_for_tomorrow(df_filled: pd.DataFrame, news: pd.DataFrame, max_news_cou
     for i in range(max_news_count):
         query[f'news{i}'] = res[i]
 
-    lags = df_filled[df_filled.date.between(str(cur_date - timedelta(days=lookback + 1)), str(cur_date))].open.reset_index(drop=True)
-
-    for i in range(1, lookback + 1):
-        query[f'shift{i}'] = lags[lags.size - i - 1]
+    lags = df_filled[df_filled.date.between(str(cur_date-timedelta(days=lookback)),str(cur_date))].open.reset_index(drop=True)
+    
+    for i in range(1,lookback+1):
+        query['shift'+str(i)] = lags[lags.size-i]
     
     return query
