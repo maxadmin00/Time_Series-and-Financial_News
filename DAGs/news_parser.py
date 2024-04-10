@@ -3,7 +3,6 @@ from datetime import timedelta, datetime
 from bs4 import BeautifulSoup
 import pandas as pd
 from selenium.webdriver.common.by import By
-from numpy import nan
 from torch import load as tload
 
 class Scrapper:
