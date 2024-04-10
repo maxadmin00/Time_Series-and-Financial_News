@@ -5,37 +5,41 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
+import os
+
+moscow_path = os.path.join('data','IMOEX_filled.csv')
+spb_path = os.path.join('data','SPBIRUS2_df_clearn.csv')
+news_path = os.path.join('data','every_piece_of_news.csv')
 
 st.title('Предсказание индексов российских бирж')
 
-df_moscow = pd.read_csv('ml_data\data\IMOEX_2009-01-01_2024-04-08.csv').tail(30)
-
-df_spb = pd.read_csv('ml_data\data\SPBIRUS2_df_clearn.csv').tail(30)
+df_spb = pd.read_csv(moscow_path).tail(30)
+df_moscow = pd.read_csv(moscow_path).tail(30)
 
 fig = go.Figure()
 
 fig.add_trace(go.Scatter(
-    x=df_moscow.DATE,
-    y=df_moscow.OPEN,
+    x=df_moscow.date,
+    y=df_moscow.open,
     name='IMOEX',
     visible=True))
 
 fig.add_trace(go.Scatter(
-    x= [df_moscow.DATE.tail(1).values[0], datetime.strptime(df_moscow.DATE.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
-    y= [df_moscow.OPEN.tail(1).values[0], np.random.randint(3000, 4000)],
+    x= [df_moscow.date.tail(1).values[0], datetime.strptime(df_moscow.date.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
+    y= [df_moscow.open.tail(1).values[0], np.random.randint(3000, 4000)],
     name='IMOEX_prediction',
     mode='lines+markers',
     visible=True))
     
 fig.add_trace(go.Scatter(
-    x=df_spb.DATE,
-    y=df_spb.OPEN,
+    x=df_spb.date,
+    y=df_spb.open,
     name='SPBIRUS',
     visible=False))
 
 fig.add_trace(go.Scatter(
-    x= [df_spb.DATE.tail(1).values[0], datetime.strptime(df_spb.DATE.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
-    y= [df_spb.OPEN.tail(1).values[0], np.random.randint(100, 200)],
+    x= [df_spb.date.tail(1).values[0], datetime.strptime(df_spb.date.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
+    y= [df_spb.open.tail(1).values[0], np.random.randint(100, 200)],
     name='IMOEX_prediction',
     mode='lines+markers',
     visible=False))
@@ -72,7 +76,7 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-df_news = pd.read_csv('ml_data\data\every_piece_of_news.csv')
+df_news = pd.read_csv(news_path)
 news_today = df_news.loc[df_news.day == df_news.tail(1).day.values[0]]
 display_news = '- ' + '\n- '.join(list(news_today.news.values))
 
