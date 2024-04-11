@@ -7,6 +7,7 @@ import numpy as np
 import plotly.graph_objects as go
 import os
 
+st.balloons()
 moscow_path = os.path.join('data','IMOEX_filled.csv')
 spb_path = os.path.join('data','SPBIRUS2_df_clearn.csv')
 
