@@ -34,7 +34,7 @@ if st.session_state.clicked:
     if option == 'IMOEX':
         df = pd.read_csv(moscow_path)
     else:
-        df = pd.read_csv(moscow_path)
+        df = pd.read_csv(spb_path)
 
     mask = (pd.to_datetime(df.date, format = '%Y-%m-%d') >= pd.to_datetime(day1)) & (pd.to_datetime(df.date, format = '%Y-%m-%d') <= pd.to_datetime(day2))
     df = df.loc[mask]
