@@ -274,14 +274,15 @@ def model_predict_imoex(**kwargs):
     model = joblib.load("data/catboost_imoex.joblib")
     query = info["query_imoex"]
     preds = model.predict(query)
+    preds = pd.DataFrame({'date':info["date_start"], 'open': preds})
     params = model.get_all_params()
     info["cb_params_imoex"] = params
-    preds.to_csv('catboost_preds_imoex.csv', index = False)
+    preds.to_csv('data/catboost_preds_imoex.csv', index = False)
 
     s3_hook.load_file('catboost_preds_imoex.csv', key = "prediction_imoex.csv", 
                         bucket_name="studcamp-ml", replace=True)
     remove('data/catboost.joblib')
-    remove('catboost_preds_imoex.csv')
+    remove('data/catboost_preds_imoex.csv')
     info["predict_imoex"] = preds
     _LOG.info("Prediction_imoex_finished.")
     info["prediction_imoex_end"] = datetime.now().strftime("%Y%m%d %H:%M")
@@ -302,14 +303,15 @@ def model_predict_spbi(**kwargs):
     model = joblib.load("data/catboost_spbi.joblib")
     query = info["query_spbi"]
     preds = model.predict(query)
+    preds = pd.DataFrame({'date':info["date_start"], 'open': preds})
     params = model.get_all_params()
     info["cb_params_spbi"] = params
-    preds.to_csv('catboost_preds_spbi.csv', index = False)
+    preds.to_csv('data/catboost_preds_spbi.csv', index = False)
 
     s3_hook.load_file('catboost_preds_spbi.csv', key = "prediction_spbi.csv", 
                         bucket_name="studcamp-ml", replace=True)
     remove('data/catboost_spbi.joblib')
-    remove('catboost_preds_spbi.csv')
+    remove('data/catboost_preds_spbi.csv')
     info["predict_spbi"] = preds
     _LOG.info("Prediction_spbi_finished.")
     info["prediction_spbi_end"] = datetime.now().strftime("%Y%m%d %H:%M")
@@ -342,10 +344,10 @@ def retrain_model_imoex(**kwargs):
     df = pd.concat([df, q], reset_index = False)
     cbr = cbr(**params)
     cbr.fit(df)
-    joblib.dump(cbr, "catboost_imoex.joblib")
-    s3_hook.load_file(cbr, key = "catboost_imoex.joblib", 
+    joblib.dump(cbr, "data/catboost_imoex.joblib")
+    s3_hook.load_file("data/catboost_imoex.joblib", key = "catboost_imoex.joblib", 
                         bucket_name="studcamp-ml", replace=True)
-    remove('catboost_imoex.joblib')
+    remove('data/catboost_imoex.joblib')
 
     today_query = info["query_imoex"]
     s3_hook.load_file(today_query, key = "yesterday_imoex_query.csv", 
@@ -384,10 +386,10 @@ def retrain_model_spbi(**kwargs):
     df = pd.concat([df, q], reset_index = False)
     cbr = cbr(**params)
     cbr.fit(df)
-    joblib.dump(cbr, "catboost_spbi.joblib")
-    s3_hook.load_file(cbr, key = "catboost_spbi.joblib", 
+    joblib.dump(cbr, "data/catboost_spbi.joblib")
+    s3_hook.load_file("data/catboost_spbi.joblib", key = "catboost_spbi.joblib", 
                         bucket_name="studcamp-ml", replace=True)
-    remove('catboost_spbi.joblib')
+    remove('data/catboost_spbi.joblib')
 
     today_query = info["query_spbi"]
     s3_hook.load_file(today_query, key = "yesterday_query.csv", 

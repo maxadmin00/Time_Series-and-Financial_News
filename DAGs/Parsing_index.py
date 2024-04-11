@@ -221,7 +221,7 @@ class SPBEDataDownloader:
         })
 
         
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     imoex_parser = SPBEDataDownloader(start_date="2009-01-01")
     imoex_parser.get_history_data()
-    imoex_parser.main_df.to_csv("test2.csv", index= False)
+    imoex_parser.main_df.to_csv("test2.csv", index= False)'''

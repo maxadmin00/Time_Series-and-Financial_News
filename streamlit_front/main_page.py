@@ -6,12 +6,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import os
+import requests
 
-moscow_path = os.path.join('data','IMOEX_filled.csv')
+'''moscow_path = os.path.join('data','IMOEX_filled.csv')
 spb_path = os.path.join('data','SPBIRUS2_df_clearn.csv')
-news_path = os.path.join('data','every_piece_of_news.csv')
+news_path = os.path.join('data','every_piece_of_news.csv')'''
 
 st.title('Предсказание индексов российских бирж')
+
+req_moscow = requests.get(http://84.252.139.210:8000/api/v1/predict)
 
 df_spb = pd.read_csv(spb_path).tail(30)
 df_moscow = pd.read_csv(moscow_path).tail(30)
