@@ -31,6 +31,7 @@ fig.add_trace(go.Scatter(
     x=df_moscow.date,
     y=df_moscow.open,
     name='IMOEX',
+    line=dict(color = '#636efa'),
     visible=True))
 
 fig.add_trace(go.Scatter(
@@ -38,12 +39,14 @@ fig.add_trace(go.Scatter(
     y= [df_moscow.open.tail(1).values[0], pred_moscow[1]],
     name='IMOEX_prediction',
     mode='lines+markers',
+    line=dict(color = '#ef553b'),
     visible=True))
     
 fig.add_trace(go.Scatter(
     x=df_spb.date,
     y=df_spb.open,
     name='SPBIRUS',
+    line=dict(color = '#636efa'),
     visible=False))
 
 fig.add_trace(go.Scatter(
@@ -51,7 +54,13 @@ fig.add_trace(go.Scatter(
     y= [df_spb.open.tail(1).values[0], pred_spb[1]],
     name='IMOEX_prediction',
     mode='lines+markers',
+    line=dict(color = '#ef553b'),
     visible=False))
+
+if pred_spb[1] >= df_spb.open.tail(1).values[0]:
+    st.balloons()
+else:
+    st.snow()    
 
 fig.update_layout(
     updatemenus=[
