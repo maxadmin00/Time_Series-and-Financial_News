@@ -7,18 +7,23 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import os
 import requests
+import json
 
-'''moscow_path = os.path.join('data','IMOEX_filled.csv')
-spb_path = os.path.join('data','SPBIRUS2_df_clearn.csv')
-news_path = os.path.join('data','every_piece_of_news.csv')'''
+news_path = os.path.join('data','every_piece_of_news.csv')
 
 st.title('Предсказание индексов российских бирж')
 
-req_moscow = requests.get(http://84.252.139.210:8000/api/v1/predict)
+req_moscow = requests.get('http://84.252.139.210:8000/api/v1/predict?index_name=imoex')
+json_response = json.loads(req_moscow.content)
+df_moscow = pd.DataFrame(json_response)
+pred_moscow = df_moscow.tail(1).values[0]
+df_moscow = df_moscow.iloc[:-1]
 
-df_spb = pd.read_csv(spb_path).tail(30)
-df_moscow = pd.read_csv(moscow_path).tail(30)
-df_spb.rename(columns={'DATE':'date', 'OPEN' : 'open'}, inplace=True)
+req_spb = requests.get('http://84.252.139.210:8000/api/v1/predict?index_name=spbirus2')
+json_response = json.loads(req_spb.content)
+df_spb = pd.DataFrame(json_response)
+pred_spb = df_spb.tail(1).values[0]
+df_spb = df_spb.iloc[:-1]
 
 fig = go.Figure()
 
@@ -29,8 +34,8 @@ fig.add_trace(go.Scatter(
     visible=True))
 
 fig.add_trace(go.Scatter(
-    x= [df_moscow.date.tail(1).values[0], datetime.strptime(df_moscow.date.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
-    y= [df_moscow.open.tail(1).values[0], np.random.randint(3000, 4000)],
+    x= [df_moscow.date.tail(1).values[0], pred_moscow[0]],
+    y= [df_moscow.open.tail(1).values[0], pred_moscow[1]],
     name='IMOEX_prediction',
     mode='lines+markers',
     visible=True))
@@ -42,8 +47,8 @@ fig.add_trace(go.Scatter(
     visible=False))
 
 fig.add_trace(go.Scatter(
-    x= [df_spb.date.tail(1).values[0], datetime.strptime(df_spb.date.tail(1).values[0], '%Y-%m-%d') + timedelta(days=1)],
-    y= [df_spb.open.tail(1).values[0], np.random.randint(100, 200)],
+    x= [df_spb.date.tail(1).values[0], pred_spb[0]],
+    y= [df_spb.open.tail(1).values[0], pred_spb[1]],
     name='IMOEX_prediction',
     mode='lines+markers',
     visible=False))
@@ -79,10 +84,12 @@ fig.update_layout(
 
 
 st.plotly_chart(fig, use_container_width=True)
-
-df_news = pd.read_csv(news_path)
-news_today = df_news.loc[df_news.day == df_news.tail(1).day.values[0]]
-display_news = '- ' + '\n- '.join(list(news_today.news.values))
+today = datetime.strftime(datetime.now() - timedelta(10), format = '%Y-%m-%d')
+req_news = requests.get(f'http://84.252.139.210:8000/api/v1/news?day={today}')
+json_response = json.loads(req_news.content)
+df_news = pd.DataFrame(json_response)
+news = df_news.news.values
+display_news = '- ' + '\n- '.join(list(news))
 
 st.subheader('Новости за сегодня')
 st.markdown(display_news)
