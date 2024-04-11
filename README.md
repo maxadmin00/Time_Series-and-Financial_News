@@ -3,7 +3,7 @@
 ## Deploy
 
 1. Create bucket
-1. Create service account with role `stroage.admin`
+1. Create service account with role `storage.admin`
 1. Create static key. Create file `~/.aws/credentials` with the following content:
 ```
 [default]
