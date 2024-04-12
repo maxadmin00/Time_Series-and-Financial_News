@@ -57,7 +57,7 @@ fig.add_trace(go.Scatter(
     line=dict(color = '#ef553b'),
     visible=False))
 
-if pred_spb[1] >= df_spb.open.tail(1).values[0]:
+if pred_moscow[1] >= df_moscow.open.tail(1).values[0]:
     st.balloons()
 else:
     st.snow()    
@@ -83,7 +83,7 @@ fig.update_layout(
         )
 
 fig.update_layout(
-    title_text = 'Значение индекса за последние 30 дней',
+    title_text = 'Значение индекса за последние 100 дней',
     title_x = 0.5,
     autosize=True,
     height=400,
