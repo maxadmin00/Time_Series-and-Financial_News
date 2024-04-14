@@ -12,3 +12,5 @@ The goal of this project is to predict the IMOEX and SPBIRUS2 indexes based on t
 
 ## Front
 Front page is being deployed via streamlit cloud
+## Researches description
+In these files we have performed the time series and news EDA and have chosen the models to predict time series values and news score
