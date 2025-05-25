@@ -1,8 +1,8 @@
 # Finance series prediction using news
 ## Fastapi
-repository link: https://github.com/gleb4ik177/Fast_api_for_ts-financial_news
+repository link: https://github.com/ksyusha123/Yandex_bootcamp_fastapi_base
 ## Airflow
-repository link: https://github.com/gleb4ik177/Airflow_for_ts-financial_news
+repository link: https://github.com/ksyusha123/Yandex_bootcamp_airflow_template
 ## About
 The goal of this project is to predict the IMOEX and SPBIRUS2 indexes based on the time series and news from finam.ru analisys.
 ### Project architecture
